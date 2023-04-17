@@ -11,75 +11,76 @@ const dataSeconds = document.querySelector('[data-seconds]');
 let timeInterval;
 
 function timeMath() {
-    const selectedDate = new Date(datePicker.value)
+  const selectedDate = new Date(datePicker.value)
 
-    if (selectedDate <= new Date()) {
-        window.alert("Please choose a date in the future")
+  if (selectedDate <= new Date()) {
+    window.alert("Please choose a date in the future")
+  }
+
+  timeInterval = setInterval(() => {
+    const currentDate = new Date();
+    const diffTime = selectedDate - currentDate;
+
+    if (diffTime <= 0) {
+      clearInterval(timeInterval)
+      dataDays.innerText = "00";
+      dataHours.innerText = "00";
+      dataMinutes.innerText = "00";
+      dataSeconds.innerText = "00";
+    } else {
+      const { days, hours, minutes, seconds } = convertMs(diffTime);
+      dataDays.innerText = addLeadingZero(days);
+      dataHours.innerText = addLeadingZero(hours);
+      dataMinutes.innerText = addLeadingZero(minutes);
+      dataSeconds.innerText = addLeadingZero(seconds);
     }
+  }, 1000)
+}
 
-    timeInterval = setInterval(() => {
-        const currentDate = new Date();
-        const diffTime = selectedDate - currentDate;
+function addLeadingZero(value) {
+  return value.toString().padStart(2, '0');
+}
 
-        if (diffTime <= 0) {
-            clearInterval(timeInterval)
-            dataDays.textContent = "00";
-            dataHours.textContent = "00";
-            dataMinutes.textContent = "00";
-            dataSeconds.textContent = "00";
-        }
-    
-        function convertMs(ms) {
-            
-            const second = 1000;
-            const minute = second * 60;
-            const hour = minute * 60;
-            const day = hour * 24;
+function convertMs(ms) {
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
 
-            const days = Math.floor(ms / day);
-            const hours = Math.floor((ms % day) / hour);
-            const minutes = Math.floor(((ms % day) % hour) / minute);
-            const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+  const days = Math.floor(ms / day);
+  const hours = Math.floor((ms % day) / hour);
+  const minutes = Math.floor(((ms % day) % hour) / minute);
+  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
-            const formatTime = `${dataDays
-                .toString()
-                .padStart(2, "0")} : ${dataHours
-                .toString()
-                .padStart(2, "0")} : ${dataMinutes.toString().padStart(2, "0")} : ${dataSeconds.toString().padStart(2, "0")}`;
-
-            return { days, hours, minutes, seconds, formatTime };
-
-        }
-
-    
-        const { days, hours, minutes, seconds } = convertMs(diffTime);
-        dataDays.textContent = days;
-        dataHours.textContent = hours;
-        dataMinutes.textContent = minutes;
-        dataSeconds.textContent = seconds;
-    }, 1000)
-    }
-
-    
-    
-
+  return { days, hours, minutes, seconds };
+}
 
 flatpickr(datePicker, {
-    enableTime: true,
-    time_24hr: true,
-    defaultDate: new Date(),
-    minuteIncrement: 1,
-    onClose(selectedDates) {
-        if (selectedDates[0] <= new Date()) {
-            window.alert("Please choose a date in the future");
-            startBtn.disabled = true;
-        } else {
-            startBtn.disabled = false;
-        }
-    },
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+    if (selectedDates[0] <= new Date()) {
+      window.alert("Please choose a date in the future");
+      startBtn.disabled = true;
+    } else {
+      startBtn.disabled = false;
+    }
+  },
 });
 
 startBtn.addEventListener('click', timeMath);
+
+
+
+
+
+
+
+
+
+
 
 
 
