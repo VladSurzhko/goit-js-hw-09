@@ -41,8 +41,16 @@ function timeMath() {
             const minutes = Math.floor(((ms % day) % hour) / minute);
             const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
-            return { days, hours, minutes, seconds };
+            const formatTime = `${dataDays
+                .toString()
+                .padStart(2, "0")} : ${dataHours
+                .toString()
+                .padStart(2, "0")} : ${dataMinutes.toString().padStart(2, "0")} : ${dataSeconds.toString().padStart(2, "0")}`;
+
+            return { days, hours, minutes, seconds, formatTime };
+
         }
+
     
         const { days, hours, minutes, seconds } = convertMs(diffTime);
         dataDays.textContent = days;
@@ -51,6 +59,9 @@ function timeMath() {
         dataSeconds.textContent = seconds;
     }, 1000)
     }
+
+    
+    
 
 
 flatpickr(datePicker, {
@@ -69,3 +80,6 @@ flatpickr(datePicker, {
 });
 
 startBtn.addEventListener('click', timeMath);
+
+
+
